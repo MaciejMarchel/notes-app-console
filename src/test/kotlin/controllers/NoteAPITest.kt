@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 
 class NoteAPITest {
 
@@ -161,6 +162,26 @@ class NoteAPITest {
             assertTrue(priority4String.contains("test app"))
             assertFalse(priority4String.contains("learning kotlin"))
             assertFalse(priority4String.contains("summer holiday"))
+        }
+
+        @Nested
+        inner class DeleteNotes {
+
+            @Test
+            fun `deleting a Note that does not exist, returns null`() {
+                assertNull(emptyNotes!!.deleteNote(0))
+                assertNull(populatedNotes!!.deleteNote(-1))
+                assertNull(populatedNotes!!.deleteNote(5))
+            }
+
+            @Test
+            fun `deleting a note that exists delete and returns deleted object`() {
+                assertEquals(5, populatedNotes!!.numberOfNotes())
+                assertEquals(swim, populatedNotes!!.deleteNote(4))
+                assertEquals(4, populatedNotes!!.numberOfNotes())
+                assertEquals(learnKotlin, populatedNotes!!.deleteNote(0))
+                assertEquals(3, populatedNotes!!.numberOfNotes())
+            }
         }
 
     }
