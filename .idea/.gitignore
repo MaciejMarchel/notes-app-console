@@ -8,3 +8,5 @@
 /dataSources.local.xml
 # Generated IntelliJ Sources
 /build
+# Generated Grade Sources
+/.gradle

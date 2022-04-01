@@ -47,7 +47,7 @@ class NoteAPITest {
         populatedNotes = null
         emptyNotes = null
     }
-
+    //Add notes test
     @Nested
     inner class AddNotes {
         @Test
@@ -71,7 +71,7 @@ class NoteAPITest {
 
     @Nested
     inner class ListNotes {
-
+        //List all notes test
         @Test
         fun `listAllNotes returns No Notes Stored message when ArrayList is empty`() {
             assertEquals(0, emptyNotes!!.numberOfNotes())
@@ -88,7 +88,7 @@ class NoteAPITest {
             assertTrue(notesString.contains("swim"))
             assertTrue(notesString.contains("summer holiday"))
         }
-
+        //List active notes test
         @Test
         fun `listActiveNotes returns no active notes stored when ArrayList is empty`() {
             assertEquals(0, emptyNotes!!.numberOfActiveNotes())
@@ -107,7 +107,7 @@ class NoteAPITest {
             assertTrue(activeNotesString.contains("test app"))
             assertFalse(activeNotesString.contains("swim"))
         }
-
+        //List Archived Notes test
         @Test
         fun `listArchivedNotes returns no archived notes when ArrayList is empty`() {
             assertEquals(0, emptyNotes!!.numberOfArchivedNotes())
@@ -115,7 +115,6 @@ class NoteAPITest {
                 emptyNotes!!.listArchivedNotes().lowercase().contains("no archived notes")
             )
         }
-
         @Test
         fun `listArchivedNotes returns archived notes when ArrayList has archived notes stored`() {
             assertEquals(2, populatedNotes!!.numberOfArchivedNotes())
@@ -126,7 +125,7 @@ class NoteAPITest {
             assertFalse(archivedNotesString.contains("test app"))
             assertTrue(archivedNotesString.contains("swim"))
         }
-
+        //List by selected priority test
         @Test
         fun `listNotesBySelectedPriority returns No Notes when ArrayList is empty`() {
             assertEquals(0, emptyNotes!!.numberOfNotes())
@@ -166,7 +165,7 @@ class NoteAPITest {
             assertFalse(priority4String.contains("learning kotlin"))
             assertFalse(priority4String.contains("summer holiday"))
         }
-
+        //Delete Notes Test
         @Nested
         inner class DeleteNotes {
 
@@ -186,7 +185,7 @@ class NoteAPITest {
                 assertEquals(3, populatedNotes!!.numberOfNotes())
             }
         }
-
+        //Update Notes test
         @Nested
         inner class UpdateNotes {
             @Test
@@ -211,7 +210,7 @@ class NoteAPITest {
                 assertEquals("College", populatedNotes!!.findNote(4)!!.noteCategory)
             }
         }
-
+        //XML Persistance Test
         @Nested
         inner class PersistenceTests {
 
@@ -254,6 +253,7 @@ class NoteAPITest {
             }
         }
 
+        //JSON persistance test
         @Test
         fun `saving and loading an empty collection in JSON doesn't crash app`() {
             // Saving an empty notes.json file.
@@ -269,7 +269,6 @@ class NoteAPITest {
             assertEquals(0, loadedNotes.numberOfNotes())
             assertEquals(storingNotes.numberOfNotes(), loadedNotes.numberOfNotes())
         }
-
         @Test
         fun `saving and loading an loaded collection in JSON doesn't loose data`() {
             // Storing 3 notes to the notes.json file.
@@ -292,5 +291,28 @@ class NoteAPITest {
             assertEquals(storingNotes.findNote(2), loadedNotes.findNote(2))
         }
 
+    }
+    //Test archived notes
+    @Nested
+    inner class ArchiveNotes {
+        @Test
+        fun `archiving a note that does not exist returns false`(){
+            assertFalse(populatedNotes!!.archiveNote(6))
+            assertFalse(populatedNotes!!.archiveNote(-1))
+            assertFalse(emptyNotes!!.archiveNote(0))
+        }
+
+        @Test
+        fun `archiving an already archived note returns false`(){
+            assertTrue(populatedNotes!!.findNote(2)!!.isNoteArchived)
+            assertFalse(populatedNotes!!.archiveNote(2))
+        }
+
+        @Test
+        fun `archiving an active note that exists returns true and archives`() {
+            assertFalse(populatedNotes!!.findNote(1)!!.isNoteArchived)
+            assertTrue(populatedNotes!!.archiveNote(1))
+            assertTrue(populatedNotes!!.findNote(1)!!.isNoteArchived)
+        }
     }
 }
