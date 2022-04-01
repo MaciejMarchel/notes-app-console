@@ -8,10 +8,12 @@ class NoteAPI(serializerType: Serializer) {
     private var serializer: Serializer = serializerType
     private var notes = ArrayList<Note>()
 
+    //Add Function
     fun add(note: Note): Boolean {
         return notes.add(note)
     }
 
+    // List Functions
     fun listAllNotes(): String {
         return if (notes.isEmpty()) {
             "No notes stored"
@@ -72,6 +74,7 @@ class NoteAPI(serializerType: Serializer) {
         }
     }
 
+    //Number of Notes functions
     fun numberOfNotes(): Int {
         return notes.size
     }
@@ -109,6 +112,7 @@ class NoteAPI(serializerType: Serializer) {
         return counter
     }
 
+    //Find note function
     fun findNote(index: Int): Note? {
         return if (isValidListIndex(index, notes)) {
             notes[index]
@@ -120,12 +124,14 @@ class NoteAPI(serializerType: Serializer) {
         return (index >= 0 && index < list.size)
     }
 
+    //Delete a note function
     fun deleteNote(indexToDelete: Int): Note? {
         return if (isValidListIndex(indexToDelete, notes)) {
             notes.removeAt(indexToDelete)
         } else null
     }
 
+    //Update a note
     fun updateNote(indexToUpdate: Int, note: Note?): Boolean {
         //find the note object by the index number
         val foundNote = findNote(indexToUpdate)
@@ -142,8 +148,21 @@ class NoteAPI(serializerType: Serializer) {
         return false
     }
 
+    //Index validation
     fun isValidIndex(index: Int) :Boolean{
         return isValidListIndex(index, notes);
+    }
+
+    //Archive Note function
+    fun archiveNote(indexToArchive: Int): Boolean {
+        if (isValidIndex(indexToArchive)) {
+            val noteToArchive = notes[indexToArchive]
+            if (!noteToArchive.isNoteArchived) {
+                noteToArchive.isNoteArchived = true
+                return true
+            }
+        }
+        return false
     }
 
     @Throws(Exception::class)
