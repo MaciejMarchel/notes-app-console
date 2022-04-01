@@ -11,3 +11,4 @@ Console for a notes app written in Kotlin
 - Persistence using XML and JSON
 - JUnit testing present
 - Nice simple UI
+- Search by Status (Todo, Doing etc)
