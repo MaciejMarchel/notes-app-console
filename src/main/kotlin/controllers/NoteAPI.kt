@@ -26,6 +26,7 @@ class NoteAPI(serializerType: Serializer) {
         if  (numberOfArchivedNotes() == 0) "No archived notes stored"
         else formatListString(notes.filter { note -> note.isNoteArchived})
 
+
     //lists notes by priority
     fun listNotesBySelectedPriority(priority: Int): String {
         return if (notes.isEmpty()) {
