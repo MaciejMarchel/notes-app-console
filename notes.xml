@@ -4,18 +4,21 @@
       <noteTitle>Test App</noteTitle>
       <notePriority>4</notePriority>
       <noteCategory>Work</noteCategory>
+      <noteStatus>Todo</noteStatus>
       <isNoteArchived>false</isNoteArchived>
     </models.Note>
     <models.Note>
       <noteTitle>Swim - Pool</noteTitle>
       <notePriority>3</notePriority>
       <noteCategory>Hobby</noteCategory>
+      <noteStatus>Done</noteStatus>
       <isNoteArchived>true</isNoteArchived>
     </models.Note>
     <models.Note>
       <noteTitle>Summer Holiday to France</noteTitle>
       <notePriority>1</notePriority>
       <noteCategory>Holiday</noteCategory>
+      <noteStatus>Doing</noteStatus>
       <isNoteArchived>false</isNoteArchived>
     </models.Note>
   </list>

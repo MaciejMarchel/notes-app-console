@@ -2,6 +2,7 @@ package controllers
 
 import models.Note
 import persistence.Serializer
+import utils.Utilities.isValidListIndex
 
 class NoteAPI(serializerType: Serializer) {
 
@@ -25,7 +26,6 @@ class NoteAPI(serializerType: Serializer) {
     fun listArchivedNotes(): String =
         if  (numberOfArchivedNotes() == 0) "No archived notes stored"
         else formatListString(notes.filter { note -> note.isNoteArchived})
-
 
     //lists notes by priority
     fun listNotesBySelectedPriority(priority: Int): String {
@@ -57,11 +57,6 @@ class NoteAPI(serializerType: Serializer) {
     fun numberOfActiveNotes(): Int   = notes.count { note: Note -> !note.isNoteArchived }
     fun numberOfNotesByPriority(priority: Int): Int = notes.count { note: Note -> note.notePriority == priority }
 
-    //utility method to determine if an index is valid in a list.
-    fun isValidListIndex(index: Int, list: List<Any>): Boolean {
-        return (index >= 0 && index < list.size)
-    }
-
     //Delete a note function
     fun deleteNote(indexToDelete: Int): Note? {
         return if (isValidListIndex(indexToDelete, notes)) {
@@ -79,6 +74,7 @@ class NoteAPI(serializerType: Serializer) {
             foundNote.noteTitle = note.noteTitle
             foundNote.notePriority = note.notePriority
             foundNote.noteCategory = note.noteCategory
+            foundNote.noteStatus = note.noteStatus
             return true
         }
 
@@ -101,6 +97,11 @@ class NoteAPI(serializerType: Serializer) {
     fun searchByTitle (searchString : String) =
         formatListString(
             notes.filter { note -> note.noteTitle.contains(searchString, ignoreCase = true) })
+
+    //Search by Status
+    fun searchByStatus (searchString: String) =
+        formatListString(
+            notes.filter {note -> note.noteStatus.contains(searchString, ignoreCase = true) })
 
     //Helper Method
     private fun formatListString(notesToFormat : List<Note>) :String =
