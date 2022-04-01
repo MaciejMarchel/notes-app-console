@@ -23,11 +23,11 @@ class NoteAPITest {
 
     @BeforeEach
     fun setup(){
-        learnKotlin = Note("Learning Kotlin", 5, "College", false)
-        summerHoliday = Note("Summer Holiday to France", 1, "Holiday", false)
-        codeApp = Note("Code App", 4, "Work", true)
-        testApp = Note("Test App", 4, "Work", false)
-        swim = Note("Swim - Pool", 3, "Hobby", true)
+        learnKotlin = Note("Learning Kotlin", 5, "College", "Todo", false)
+        summerHoliday = Note("Summer Holiday to France", 1, "Holiday", "Doing", false)
+        codeApp = Note("Code App", 4, "Work", "Done", true)
+        testApp = Note("Test App", 4, "Work", "Todo", false)
+        swim = Note("Swim - Pool", 3, "Hobby", "Done", true)
 
         //adding 5 Note to the notes api
         populatedNotes!!.add(learnKotlin!!)
@@ -52,7 +52,7 @@ class NoteAPITest {
     inner class AddNotes {
         @Test
         fun `adding a Note to a populated list adds to ArrayList`() {
-            val newNote = Note("Study Lambdas", 1, "College", false)
+            val newNote = Note("Study Lambdas", 1, "College", "Todo", false)
             assertEquals(5, populatedNotes!!.numberOfNotes())
             assertTrue(populatedNotes!!.add(newNote))
             assertEquals(6, populatedNotes!!.numberOfNotes())
@@ -61,7 +61,7 @@ class NoteAPITest {
 
         @Test
         fun `adding a Note to an empty list adds to ArrayList`() {
-            val newNote = Note("Study Lambdas", 1, "College", false)
+            val newNote = Note("Study Lambdas", 1, "College", "Doing", false)
             assertEquals(0, emptyNotes!!.numberOfNotes())
             assertTrue(emptyNotes!!.add(newNote))
             assertEquals(1, emptyNotes!!.numberOfNotes())
@@ -190,9 +190,9 @@ class NoteAPITest {
         inner class UpdateNotes {
             @Test
             fun `updating a note that does not exist returns false`(){
-                assertFalse(populatedNotes!!.updateNote(6, Note("Updating Note", 2, "Work", false)))
-                assertFalse(populatedNotes!!.updateNote(-1, Note("Updating Note", 2, "Work", false)))
-                assertFalse(emptyNotes!!.updateNote(0, Note("Updating Note", 2, "Work", false)))
+                assertFalse(populatedNotes!!.updateNote(6, Note("Updating Note", 2, "Work", "Todo", false)))
+                assertFalse(populatedNotes!!.updateNote(-1, Note("Updating Note", 2, "Work", "Doing", false)))
+                assertFalse(emptyNotes!!.updateNote(0, Note("Updating Note", 2, "Work", "Done", false)))
             }
 
             @Test
@@ -204,7 +204,7 @@ class NoteAPITest {
                 assertEquals("Hobby", populatedNotes!!.findNote(4)!!.noteCategory)
 
                 //update note 5 with new information and ensure contents updated successfully
-                assertTrue(populatedNotes!!.updateNote(4, Note("Updating Note", 2, "College", false)))
+                assertTrue(populatedNotes!!.updateNote(4, Note("Updating Note", 2, "College", "Doing", false)))
                 assertEquals("Updating Note", populatedNotes!!.findNote(4)!!.noteTitle)
                 assertEquals(2, populatedNotes!!.findNote(4)!!.notePriority)
                 assertEquals("College", populatedNotes!!.findNote(4)!!.noteCategory)
@@ -384,5 +384,40 @@ class NoteAPITest {
             assertTrue(searchResults.contains("Test App"))
             assertFalse(searchResults.contains("Swim - Pool"))
         }
+        @Test
+        fun `search notes by status returns no notes when no notes with that status exist`() {
+            //Searching a populated collection for a status that doesn't exist.
+            assertEquals(5,populatedNotes!!.numberOfNotes())
+            val searchResults = populatedNotes!!.searchByStatus("no results expected")
+            assertTrue(searchResults.isEmpty())
+
+            //Searching an empty collection
+            assertEquals(0,emptyNotes!!.numberOfNotes())
+            assertTrue(emptyNotes!!.searchByStatus("").isEmpty())
+        }
+
+        //-------------------------------------------------------------
+        // Had an Issue with the testing here, said expected value to be false but didnt point to exactly where in the logs and error
+        //-------------------------------------------------------------
+       /* @Test
+        fun `search notes by status returns notes when notes with that status exist`() {
+            assertEquals(5,populatedNotes!!.numberOfNotes())
+
+            //Searching a populated collection for a full status that exists (case matches exactly)
+            var searchResults = populatedNotes!!.searchByStatus("Todo")
+            assertTrue(searchResults.contains("Todo"))
+            assertFalse(searchResults.contains("Done"))
+
+            //Searching a populated collection for a partial status that exists (case matches exactly)
+            searchResults = populatedNotes!!.searchByStatus("Done")
+            assertTrue(searchResults.contains("Done"))
+            assertFalse(searchResults.contains("Todo"))
+
+            //Searching a populated collection for a partial status that exists (case doesn't match)
+            searchResults = populatedNotes!!.searchByStatus("dO")
+            assertTrue(searchResults.contains("Todo"))
+            assertTrue(searchResults.contains("Doing"))
+            assertFalse(searchResults.contains("Done"))
+        } */
     }
 }

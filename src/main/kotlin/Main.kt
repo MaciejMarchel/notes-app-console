@@ -32,6 +32,7 @@ fun mainMenu(): Int {
          > |   5) Archive a note            |
          > ----------------------------------
          > |   6) Search Notes              |
+         > |   7) Search Status             |
          > ----------------------------------
          > |   20) Save notes               |
          > |   21) Load notes               |
@@ -51,6 +52,7 @@ fun runMenu() {
             4 -> deleteNote()
             5 -> archiveNote()
             6 -> searchNotes()
+            7 -> searchStatus()
             20 -> save()
             21 -> load()
             0 -> exitApp()
@@ -64,7 +66,8 @@ fun addNote(){
     val noteTitle = readNextLine("Enter a title for the note: ")
     val notePriority = readNextInt("Enter a priority (1-low, 2, 3, 4, 5-high): ")
     val noteCategory = readNextLine("Enter a category for the note: ")
-    val isAdded = noteAPI.add(Note(noteTitle, notePriority, noteCategory, false))
+    val noteStatus = readNextLine("Enter a status for the note: ")
+    val isAdded = noteAPI.add(Note(noteTitle, notePriority, noteCategory, noteStatus, false))
 
     if (isAdded) {
         println("Added Successfully")
@@ -119,9 +122,10 @@ fun updateNote() {
             val noteTitle = readNextLine("Enter a title for the note: ")
             val notePriority = readNextInt("Enter a priority (1-low, 2, 3, 4, 5-high): ")
             val noteCategory = readNextLine("Enter a category for the note: ")
+            val noteStatus = readNextLine("Enter a status for the note: ")
 
             //pass the index of the note and the new note details to NoteAPI for updating and check for success.
-            if (noteAPI.updateNote(indexToUpdate, Note(noteTitle, notePriority, noteCategory, false))){
+            if (noteAPI.updateNote(indexToUpdate, Note(noteTitle, notePriority, noteCategory, noteStatus, false))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
@@ -166,6 +170,17 @@ fun archiveNote() {
 fun searchNotes() {
     val searchTitle = readNextLine("Enter the description to search by: ")
     val searchResults = noteAPI.searchByTitle(searchTitle)
+    if (searchResults.isEmpty()) {
+        println("No notes found")
+    } else {
+        println(searchResults)
+    }
+}
+
+//Search by Status
+fun searchStatus() {
+    val searchStatus = readNextLine("Enter the status to search by: ")
+    val searchResults = noteAPI.searchByStatus(searchStatus)
     if (searchResults.isEmpty()) {
         println("No notes found")
     } else {
